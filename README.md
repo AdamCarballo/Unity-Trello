@@ -11,7 +11,7 @@ This repository allows you to use a Trello board as a bug and issue storage, cre
 Licence
 ---
 This repository is based on [Trello-Cards-Unity](https://github.com/bfollington/Trello-Cards-Unity) by [bfollington](https://github.com/bfollington).<br>
-Even though the code has been improved and has added features over the original source, all the files that come from the original repository (*Stated on the header comment on each file*) remain under the original author licence.<br><br>
+Even though the code has been improved and has added features over the original source, all the files that come from the original repository (*stated on the header comment on each file*) remain under the original author licence.<br><br>
 This repository also uses `MiniJSON.cs` whose license is stated on the header comment inside the file.<br><br>
 Any other files remain under GNU General Public License v3.0.
 
@@ -133,7 +133,7 @@ desc.text + "\n" +
 "Tracked object position: " + trackedObject.position;
 ```
 Once uploaded to Trello, the card description looks like this:<br>
-[Trello Description](https://octodex.github.com/images/yaktocat.png)<br>
+![Trello Description](https://imgur.com/a/VqZTx)<br>
 
 For more information on how to use Markdown, or what syntax Trello supports, read the Trello [documentation](http://help.trello.com/article/821-using-markdown-in-trello).
 
