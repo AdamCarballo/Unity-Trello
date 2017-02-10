@@ -133,7 +133,7 @@ desc.text + "\n" +
 "Tracked object position: " + trackedObject.position;
 ```
 Once uploaded to Trello, the card description looks like this:<br>
-![Trello Description](https://imgur.com/a/VqZTx)<br>
+![Trello Description](https://i.imgur.com/Zt7UD9N.png)<br>
 
 For more information on how to use Markdown, or what syntax Trello supports, read the Trello [documentation](http://help.trello.com/article/821-using-markdown-in-trello).
 
