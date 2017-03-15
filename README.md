@@ -99,8 +99,8 @@ A Trello card can store the following data:
 string name // Name of the card. Will appear in the Title of the card
 string desc // Description of the card. Will appear in the description of the card
 string due // Date of the card. Will appear as "Due Date" in the card. Must use System.DateTime
-string urlSource // A URL. If not "null" a link will be attached to the card
-byte[] fileSource // A file / photo. If not null a file will be attached to the card
+string urlSource // A URL. If not null a link will be attached to the card
+byte[] fileSource // A file / photo. If not null will try to attach a file to the card
 string fileName // Name of the file. If this or fileSource is null, the file will be ignored
 
 // Public, but will get overwritten on runtime:
@@ -140,7 +140,7 @@ For more information on how to use Markdown, or what syntax Trello supports, rea
 Demo
 ----
 The Demo folder from the source code (included in the [Unitypackage](https://github.com/AdamEC/Unity-Trello/releases)) includes a demo scene with custom UI to understand how everything works.<br>
-Remember to fill the variables `key` and `token` on the inspector with the ones obtained from Trello, and set the default board an list where the card should be uploaded.
+Remember to fill the variables `key` and `token` on the inspector with the ones obtained from Trello, and set the default board and list where the card should be uploaded.
 
 History
 ----
