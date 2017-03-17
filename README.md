@@ -13,7 +13,7 @@ Licence
 This repository is based on [Trello-Cards-Unity](https://github.com/bfollington/Trello-Cards-Unity) by [bfollington](https://github.com/bfollington).<br>
 Even though the code has been improved and has added features over the original source, all the files that come from the original repository (*stated on the header comment on each file*) remain under the original author licence.<br><br>
 This repository also uses `MiniJSON.cs` whose license is stated on the header comment inside the file.<br><br>
-Any other files remain under GNU General Public License v3.0.
+Any other files remain under the MIT License.
 
 
 
