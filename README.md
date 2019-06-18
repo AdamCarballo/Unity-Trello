@@ -161,6 +161,6 @@ History
 Created by Àdam Carballo (AdamEC)<br>
 Check other works on *[Engyne Creations](https://engynecreations.com)*.<br>
 
-[![Buy Me A Coffe](https://www.buymeacoffee.com/assets/img/custom_images/white_img.png)](https://www.buymeacoffee.com/engyne)
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/X8X4XHCE)
 
 Huge thanks to [bfollington](https://github.com/bfollington) for the original code that I've been using for a long time.
