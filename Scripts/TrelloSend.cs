@@ -2,31 +2,38 @@
  * TrelloSend.cs
  * Script that holds keys and allows to send Trello cards.
  *  
- * by Adam Carballo under GPLv3 license.
- * https://github.com/AdamEC/Unity-Trello
+ * by Àdam Carballo under MIT license.
+ * https://github.com/AdamCarballo/Unity-Trello
  */
 
 using System.Collections;
 using UnityEngine;
 
-
 namespace Trello {
     public class TrelloSend : MonoBehaviour {
 
         [Header("Trello Auth")]
-        [SerializeField] private string _key;
-        public string key { set { _key = value; } }
-        [SerializeField] private string _token;
-        public string token { set { _token = value; } }
+        [SerializeField]
+        private string _key;
+        [SerializeField]
+        private string _token;
 
         [Header("Trello Settings")]
-        [SerializeField] private string _defaultBoard;
-        [SerializeField] private string _defaultList;
+        [SerializeField]
+        private string _defaultBoard;
+        [SerializeField]
+        private string _defaultList;
 
+        public string Key {
+            set => _key = value;
+        }
 
+        public string Token {
+            set => _token = value;
+        }
+        
         private void Start() {
-
-            if (_key == "" || _token == "") {
+            if (string.IsNullOrEmpty(_key) || string.IsNullOrEmpty(_token)) {
                 throw new TrelloException("The Trello API key or token are missing!");
             }
         }
@@ -52,7 +59,7 @@ namespace Trello {
         private IEnumerator Send_Internal(TrelloCard card, string list, string board) {
 
             // Create an API instance
-            TrelloAPI api = new TrelloAPI(_key, _token);
+            var api = new TrelloAPI(_key, _token);
 
             // Wait for the Trello boards
             yield return api.PopulateBoards();

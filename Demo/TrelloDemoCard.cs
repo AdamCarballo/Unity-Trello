@@ -1,9 +1,9 @@
 ﻿/*
  * TrelloDemoCard.cs
- * Demostration of a system information card.
+ * Demonstration of a system information card.
  *  
- * by Adam Carballo under GPLv3 license.
- * https://github.com/AdamEC/Unity-Trello
+ * by Àdam Carballo under MIT license.
+ * https://github.com/AdamCarballo/Unity-Trello
  */
 
 using System;

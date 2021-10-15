@@ -5,8 +5,8 @@
  * Original by bfollington
  * https://github.com/bfollington/Trello-Cards-Unity
  * 
- * by Adam Carballo under GPLv3 license.
- * https://github.com/AdamEC/Unity-Trello
+ * by Àdam Carballo under MIT license.
+ * https://github.com/AdamCarballo/Unity-Trello
  */
 
 using System.Collections.Generic;
@@ -17,15 +17,17 @@ using UnityEngine.Networking;
 namespace Trello {
 	public class TrelloAPI {
 		
-		private string _token;
-		private string _key;
+		private const string MemberBaseUrl = "https://api.trello.com/1/members/me";
+		private const string BoardBaseUrl = "https://api.trello.com/1/boards/";
+		private const string CardBaseUrl = "https://api.trello.com/1/cards/";
+		
+		private readonly string _token;
+		private readonly string _key;
+		
 		private List<object> _boards;
 		private List<object> _lists;
-		private const string _memberBaseUrl = "https://api.trello.com/1/members/me";
-		private const string _boardBaseUrl = "https://api.trello.com/1/boards/";
-		private const string _cardBaseUrl = "https://api.trello.com/1/cards/";
-		private string _currentBoardId = null;
-		private string _currentListId = null;
+		private string _currentBoardId;
+		private string _currentListId;
 
 
 		/// <summary>
@@ -43,11 +45,13 @@ namespace Trello {
 		/// Checks if a UnityWebRequest object returned an error, and if so throws an exception.
 		/// </summary>
 		/// <param name="errorMessage">Error message to display.</param>
-		/// <param name="www">The UnityWebRequest object.</param>
-		private void CheckWebRequestStatus(string errorMessage, UnityWebRequest www) {
-
-			if (www.isNetworkError || www.isHttpError) {
-				throw new TrelloException(errorMessage + ": " + www.error + "(" + www.downloadHandler.text + ")");
+		/// <param name="uwr">The UnityWebRequest object.</param>
+		private void CheckWebRequestStatus(string errorMessage, UnityWebRequest uwr) {
+			switch (uwr.result) {
+				case UnityWebRequest.Result.ConnectionError:
+				case UnityWebRequest.Result.ProtocolError:
+				case UnityWebRequest.Result.DataProcessingError:
+					throw new TrelloException($"{errorMessage}: {uwr.error} ({uwr.downloadHandler.text})");
 			}
 		}
 
@@ -56,23 +60,19 @@ namespace Trello {
 		/// </summary>
 		/// <returns>Downloaded boards.</returns>
 		public List<object> PopulateBoards() {
-
 			_boards = null;
-			UnityWebRequest www = UnityWebRequest.Get(string.Format("{0}?key={1}&token={2}&boards=all", _memberBaseUrl, _key, _token));
-			www.chunkedTransfer = false;
-
-			UnityWebRequestAsyncOperation operation = www.SendWebRequest();
+			var uwr = UnityWebRequest.Get($"{MemberBaseUrl}?key={_key}&token={_token}&boards=all");
+			var operation = uwr.SendWebRequest();
 
 			// Wait for request to return
 			while (!operation.isDone) {
-				CheckWebRequestStatus("The Trello servers did not respond.", www);
+				CheckWebRequestStatus("The Trello servers did not respond.", uwr);
 			}
 
-			var boardsDict = Json.Deserialize(www.downloadHandler.text) as Dictionary<string, object>;
-
-			if (boardsDict == null) {
+			if (!(Json.Deserialize(uwr.downloadHandler.text) is Dictionary<string, object> boardsDict)) {
 				throw new TrelloException("No boards found or something went wrong.");
 			}
+			
 			_boards = (List<object>) boardsDict["boards"];
 			return _boards;
 		}
@@ -87,16 +87,16 @@ namespace Trello {
 				throw new TrelloException("There are no boards available. Either the user does not have access to a board or PopulateBoards() wasn't called.");
 			}
 			
-			for (int i = 0; i < _boards.Count; i++) {
+			for (var i = 0; i < _boards.Count; i++) {
 				var board = (Dictionary<string, object>) _boards[i];
-				if ((string) board["name"] == name) {
-					_currentBoardId = (string) board["id"];
-					return;
-				}
+				if ((string)board["name"] != name) continue;
+				
+				_currentBoardId = (string) board["id"];
+				return;
 			}
 			
 			_currentBoardId = null;
-			throw new TrelloException("A board with the name " + name + " was not found.");
+			throw new TrelloException($"A board with the name {name} was not found.");
 		}
 
 		/// <summary>
@@ -108,22 +108,18 @@ namespace Trello {
 			_lists = null;
 			
 			if (_currentBoardId == null) {
-				throw new TrelloException("Cannot retreive the lists, there isn't a selected board yet.");
+				throw new TrelloException("Cannot retrieve the lists, there isn't a selected board yet.");
 			}
 
-			UnityWebRequest www = UnityWebRequest.Get(string.Format("{0}{1}?key={2}&token={3}&lists=all", _boardBaseUrl, _currentBoardId, _key, _token));
-			www.chunkedTransfer = false;
-
-			UnityWebRequestAsyncOperation operation = www.SendWebRequest();
+			var uwr = UnityWebRequest.Get($"{BoardBaseUrl}{_currentBoardId}?key={_key}&token={_token}&lists=all");
+			var operation = uwr.SendWebRequest();
 
 			// Wait for request to return
 			while (!operation.isDone) {
-				CheckWebRequestStatus("Connection to the Trello servers was not possible.", www);
+				CheckWebRequestStatus("Connection to the Trello servers was not possible.", uwr);
 			}
 
-			var listsDict = Json.Deserialize(www.downloadHandler.text) as Dictionary<string, object>;
-
-			if (listsDict == null) {
+			if (!(Json.Deserialize(uwr.downloadHandler.text) is Dictionary<string, object> listsDict)) {
 				throw new TrelloException("No lists found or something went wrong.");
 			}
 
@@ -141,16 +137,16 @@ namespace Trello {
 				throw new TrelloException("There are no lists available. Either the board does not contain lists or PopulateLists() wasn't called.");
 			}
 
-			for (int i = 0; i < _lists.Count; i++) {
+			for (var i = 0; i < _lists.Count; i++) {
 				var list = (Dictionary<string, object>) _lists[i];
-				if ((string) list["name"] == name) {
-					_currentListId = (string) list["id"];
-					return;
-				}
+				if ((string)list["name"] != name) continue;
+				
+				_currentListId = (string) list["id"];
+				return;
 			}
 			
 			_currentListId = null;
-			throw new TrelloException("A list with the name " + name + " was not found.");
+			throw new TrelloException($"A list with the name {name} was not found.");
 		}
 		
 		/// <summary>
@@ -165,12 +161,12 @@ namespace Trello {
 			return _currentListId;
 		}
 
-		/// <summary>
+		/*/// <summary>
 		/// Given an exception object, a TrelloCard is created and populated with the relevant information from the exception. This is then uploaded to the Trello server.
 		/// </summary>
 		/// <returns>The exception card.</returns>
 		/// <param name="e">E.</param>
-		/*public TrelloCard uploadExceptionCardd(Exception e) {
+		public TrelloCard uploadExceptionCardd(Exception e) {
 
 			TrelloCard card = new TrelloCard();
 			card.name = e.GetType().ToString();
@@ -188,7 +184,7 @@ namespace Trello {
 		/// <param name="card">Trello card to upload.</param>
 		public TrelloCard UploadCard(TrelloCard card) {
 
-			WWWForm post = new WWWForm();
+			var post = new WWWForm();
 			post.AddField("name", card.name);
 			post.AddField("desc", card.desc);
 			post.AddField("due", card.due);
@@ -198,17 +194,15 @@ namespace Trello {
 				post.AddBinaryData("fileSource", card.fileSource, card.fileName);
 			}
 
-			UnityWebRequest www = UnityWebRequest.Post(string.Format("{0}?key={1}&token={2}", _cardBaseUrl, _key, _token), post);
-			www.chunkedTransfer = false;
-
-			UnityWebRequestAsyncOperation operation = www.SendWebRequest();
+			var uwr = UnityWebRequest.Post($"{CardBaseUrl}?key={_key}&token={_token}", post);
+			var operation = uwr.SendWebRequest();
 
 			// Wait for request to return
 			while (!operation.isDone) {
-				CheckWebRequestStatus("Could not upload the Trello card.", www);
+				CheckWebRequestStatus("Could not upload the Trello card.", uwr);
 			}
 
-			Debug.Log("Trello card sent!\nResponse " + www.responseCode);
+			Debug.Log($"Trello card sent!\nResponse {uwr.responseCode}");
 			return card;
 		}
 	}

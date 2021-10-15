@@ -2,8 +2,8 @@
  * RotateAround.cs
  * Rotate an object around a pivot.
  *  
- * by Adam Carballo under GPLv3 license.
- * https://github.com/AdamEC/Unity-Trello
+ * by Àdam Carballo under MIT license.
+ * https://github.com/AdamCarballo/Unity-Trello
  */
 
 using UnityEngine;
