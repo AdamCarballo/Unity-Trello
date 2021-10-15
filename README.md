@@ -19,7 +19,7 @@ Any other files remain under the MIT License.
 
 Install
 ----
-The source code is available directly from the folders, or if you want you can download only the [Unitypackage](https://github.com/AdamEC/Unity-Trello/releases) and import from there.
+The source code is available directly from the folders, or if you want you can download only the [Unitypackage](https://github.com/AdamCarballo/Unity-Trello/releases) and import from there.
 
 Before continuing, read the **Key and token Security** section, down below, it's very important to understand the security risks.<br>
 To use this repository, you will need a Trello account (*remember, not your personal account!*) to obtain a Trello API key and a token.
@@ -29,8 +29,10 @@ Go to https://trello.com/app-key (*Logged on the bot / bug report Trello account
 This application key will become the *Trello API key*, or just *key* for short.
 
 #### Create a new Application (Token):
-Now, go to https://trello.com/1/connect?key=[yourkeygoeshere]&name=Unity%20Trello&response_type=token&scope=read,write&expiration=never (*Change `[yourkeygoeshere]` for your key*).<br>
-This will create a new App that will not expirate (`expiration=never`). If you want to remove this app on the future, go to Trello > Settings and revoke access to the App (*Unity Trello*).<br>
+Now, go to https://trello.com/1/connect?key=[yourkeygoeshere]&name=Unity%20Trello&response_type=token&scope=read,write&expiration=never (*Change `[yourkeygoeshere]` for your key*).
+
+This will create a new App that will not expire (`expiration=never`). If you want to remove this app on the future, go to Trello > Settings and revoke access to the App (*Unity Trello*).
+
 If everything works, you will be redirected to https://trello.com/1/token/approve where you will get your token.
 
 Key and token Security
@@ -41,7 +43,7 @@ Before using your Trello account, or any other account with access to private or
 
 The public key (as the name implies) can be public, think of it as the account identifier. That's also why is recommended to create a new account for every app / integration. You don't want the same public API key for two unrelated apps, or your personal account.
 
-The application token is another story though. Anyone with your token (and public API) will have access to the entire account. 
+The application token is another story though. Anyone with your token (and public API) will have access to the entire account.
 
 This is why you should **not use your personal account, or any account with access to other boards**. If someone obtains your key and token, they can **create, move and delete any card, on any board you have access**. I recommend creating a bot account that will only have access to the bug report board, this way if something goes wrong, only that board would get affected.
 
@@ -153,14 +155,12 @@ For more information on how to use Markdown, or what syntax Trello supports, rea
 
 Demo
 ----
-The demo folder from the source code (included in the [Unitypackage](https://github.com/AdamEC/Unity-Trello/releases)) includes a demo scene with custom UI to understand how everything works.<br>
+The demo folder from the source code (included in the [Unitypackage](https://github.com/AdamCarballo/Unity-Trello/releases)) includes a demo scene with custom UI to understand how everything works.<br>
 Remember to fill the variables `key` and `token` on the inspector with the ones obtained from Trello, and set the default board and list where the card should be uploaded.
 
 History
 ----
-Created by Àdam Carballo (AdamEC)<br>
-Check other works on *[Engyne Creations](https://engynecreations.com)*.<br>
-
-[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/X8X4XHCE)
+Created by Àdam Carballo<br>
+Check other stuff on *[F10.DEV](https://f10.dev)*.<br>
 
 Huge thanks to [bfollington](https://github.com/bfollington) for the original code that I've been using for a long time.
